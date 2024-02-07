@@ -74,7 +74,6 @@ echo -e "\033[31mThis will wipe ALL DATA off your uSD card!\033[0m"
 echo -e "\033[31mPress enter to continue...\033[0m"
 read
 echo "Checking for files..."
-boot_usb.img.gz
 if [ ${PARTITION} = 1 ]; then
 	download_mode
 	heimdall flash --tflash --repartition --pit KLTE_USA_ATT.pit
