@@ -10,7 +10,7 @@ It allows booting TWRP/AOSP ROM  by using [SVE-2016-7930](https://github.com/fre
 
 - AT&T S5 on firmware version G900AUCS4DQB1
 
-- Micro SD card (:warning:This will be erased:warning:)
+- Micro SD card ( :warning: This will be erased :warning: )
 
 - Heimdall with [This patch](https://github.com/frederic/SVE-2016-7930/blob/master/heimdall-increase_fileTransferSequenceMaxLength.patch) applied (a x64 pre-patched binary is in this repo)
 
@@ -32,7 +32,7 @@ It allows booting TWRP/AOSP ROM  by using [SVE-2016-7930](https://github.com/fre
 
 Get a Linux system to continue (Eg. a Ubuntu Desktop Live CD)
 
-- [Download this repo](https://github.com)
+- [Download this repo](https://github.com/justaCasualCoder/G900A-TWRP-ROM/archive/refs/heads/main.zip)
 
 - Extract it
 
