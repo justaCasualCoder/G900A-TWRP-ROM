@@ -8,7 +8,7 @@ It allows booting TWRP/AOSP ROM  by using [SVE-2016-7930](https://github.com/fre
 
 # Requirements
 
-- AT&T S5 on firmware version G900AUCS4DQB1
+- AT&T S5 on firmware version G900AUCS4DQB1 (Flash ABOOT.mbn from G900AUCS4DQB1)
 
 - Micro SD card ( :warning: This will be erased :warning: )
 
