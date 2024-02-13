@@ -74,10 +74,6 @@ echo -e "\033[31mThis will wipe ALL DATA off your uSD card!\033[0m"
 echo -e "\033[31mPress enter to continue...\033[0m"
 read
 echo "Checking for files..."
-if [ ${PARTITION} = 1 ]; then
-	download_mode
-	heimdall flash --tflash --repartition --pit KLTE_USA_ATT.pit
-fi
 download_mode() {
 echo "Reboot to Download mode"
 echo "- Poweroff"
@@ -96,7 +92,7 @@ TWRP_FLASH() {
 	echo "Press and hold volume down and home"
 	echo "Press enter when ready"
 	read
-	heimdall flash --tflash  --RECOVERY twrp.img --BOOT boot_sdcard.img
+	heimdall flash --tflash --RECOVERY twrp.img --BOOT boot_sdcard.img
 	echo "Waiting for device to reboot to Download mode..."
 	sleep 2
 	heimdall detect &> /dev/null
@@ -110,6 +106,10 @@ TWRP_FLASH() {
 	echo "Device should now boot to TWRP"
 	echo "Done"
 }
+if [ ${PARTITION} = 1 ]; then
+	download_mode
+	heimdall flash --tflash --repartition --pit KLTE_USA_ATT.pit --BOOT boot_sdcard.img
+fi
 if [ ${TWRP} = 1 ]; then
 	TWRP_FLASH
 fi
@@ -125,26 +125,19 @@ if [ ${FLASHZIP} = 1 ]; then
 	unzip -d /tmp/ ${FILE} boot.img 
 	TWRP_FLASH
 	echo "Waiting for TWRP..."
-	read
-	read
+	sleep 20 # TODO: Use adb wait-for-device
+	echo "Turning on ADB sideload"
 	adb shell twrp sideload
 	sleep 5 # It take a while to go from shell to sideload
+	echo "Sideloading ROM"
 	adb sideload ${FILE}
 	sleep 5 # It take a while to go from sideload to shell
-	adb shell twrp reboot download
-	echo "Waiting for device..."
-	heimdall detect &> /dev/null
-	while [ $? -ne 0 ]; do
-		sleep 0.5
-		heimdall detect &> /dev/null
-	done
-	echo "Device detected"
-	echo "Press and hold volume down and home"
-	echo "Press enter when ready"
-	read
-	heimdall flash --tflash  --RECOVERY /tmp/boot.img --BOOT boot_sdcard.img
+	echo "Flashing boot image"
+	adb push /tmp/boot.img /tmp/
+	adb shell dd if=/tmp/boot.img of=/dev/mmcblk1p16
+	echo "Rebooting to Download Mode"
+	adb reboot download
 	echo "Waiting for device to reboot to Download mode..."
-	sleep 2
 	heimdall detect &> /dev/null
 	while [ $? -ne 0 ]; do
 		sleep 0.5
