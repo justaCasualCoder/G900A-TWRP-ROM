@@ -132,11 +132,19 @@ if [ ${FLASHZIP} = 1 ]; then
 	echo "Sideloading ROM"
 	adb sideload ${FILE}
 	sleep 5 # It take a while to go from sideload to shell
-	echo "Flashing boot image"
-	adb push /tmp/boot.img /tmp/
-	adb shell dd if=/tmp/boot.img of=/dev/mmcblk1p16
-	echo "Rebooting to Download Mode"
-	adb reboot download
+ 	adb shell twrp reboot download
+	echo "Waiting for device..."
+	heimdall detect &> /dev/null
+	while [ $? -ne 0 ]; do
+		sleep 0.5
+		heimdall detect &> /dev/null
+	done
+	echo "Device detected"
+	echo "Press and hold volume down and home"
+	echo "Press enter when ready"
+	read
+	heimdall flash --tflash  --RECOVERY /tmp/boot.img --BOOT boot_sdcard.img
+ 	sleep 2
 	echo "Waiting for device to reboot to Download mode..."
 	heimdall detect &> /dev/null
 	while [ $? -ne 0 ]; do
