@@ -8,9 +8,9 @@ It allows booting TWRP/AOSP ROM  by using [SVE-2016-7930](https://github.com/fre
 
 # Requirements
 
-- AT&T S5 on firmware version G900AUCS4DQB1
+- AT&T S5 on ABOOT (firmware) version G900AUCS4DQB1
 
-- Micro SD card ( :warning: This will be erased :warning: )
+- Micro SD card ( :warning:This will be erased:warning: )
 
 - Heimdall with [This patch](https://github.com/frederic/SVE-2016-7930/blob/master/heimdall-increase_fileTransferSequenceMaxLength.patch) applied (a x64 pre-patched binary is in this repo)
 
@@ -21,12 +21,17 @@ It allows booting TWRP/AOSP ROM  by using [SVE-2016-7930](https://github.com/fre
 # Getting started
 
 ## Getting to the right firmware
-
+### If you want your phone to still boot without a PC:
 - Download [G900AUCS4DPH4](https://androidfilehost.com/?fid=312968873555011029) and flash it in odin
 
 - Download [PH4-QA1.zip](https://www.androidfilehost.com/?fid=745425885120714574) and [QA1-QB1.zip](https://www.androidfilehost.com/?fid=673368273298937968)
 
 - Flash both in recovery (Use ADB sideload from a computer or flash from uSD card)
+
+### The quick and dirty way (your phone won't boot anything but download mode)
+- Download [QA1-QB1.zip](https://www.androidfilehost.com/?fid=673368273298937968)
+
+- Unzip it and flash the `aboot.mbn` from it (Eg. `unzip -d /tmp/ QA1-QB1.zip aboot.mbn && heimdall flash --ABOOT /tmp/aboot.mbn && rm /tmp/aboot.mbn`)
 
 ## Running it
 
@@ -81,9 +86,9 @@ main.sh -i boot.img
 ## Flash Magisk
 
 - Install Magisk
-
-- Copy the resulting `.img` to your computer (`adb pull /storage/emulated/0/Download/*.img .`)
-
-- Flash the new image (`bash main.sh -i magisk_patched.img`)
-
-
+- Enable rooted ADB
+- Connect to adb (`adb root`)
+- Get the boot image (`adb shell dd if=/dev/mmcblk1p16 of=/sdcard/boot.img`)
+- Patch it with Magisk
+- Flash the new image (`adb shell dd if=$(ls /sdcard/Download/*.img) of=/dev/mmcblk1p16`)
+- Reboot
